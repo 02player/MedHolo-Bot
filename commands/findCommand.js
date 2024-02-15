@@ -1,8 +1,9 @@
 module.exports = (client, logs_channel,Events) => {
     const {ChannelType} = require("discord.js");
-    const {secondGuildId} = require("../config.json")
+    const {firstGuildId, secondGuildId} = require("../config.json")
     const secondGuild = client.guilds.cache.get(secondGuildId)
     client.on(Events.InteractionCreate, async interaction => {
+        if(interaction.guild.id != firstGuildId) {await interaction.reply({content: "Komendę można wykonać tylko na głównym discordzie MedHolo EMS.\n[Kliknij tutaj, aby dołączyć!](https://discord.gg/medholo-ems-986930829936717844)", ephemeral: true}); return; }
         if(!interaction.isCommand()) return;
         if(interaction.commandName == "find"){
             const startTime = Date.now();

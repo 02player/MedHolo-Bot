@@ -7,6 +7,10 @@ module.exports = (client) => {
     var welcome_channel;
     client.on(Events.ClientReady, async () => {
         console.log(`Logged in as ${client.user.tag}`);
+        console.log(`Bot działa na serwerach:`)
+        client.guilds.cache.forEach(guild => {
+            console.log(guild.name)
+        });
         const find = new SlashCommandBuilder().setName("find").setDescription("Przeszukuje kanały w poszukiwaniu danej frazy.").addStringOption(option => option.setName("fraza").setDescription("Wyszukiwana fraza.").setRequired(true));
         client.application.commands.create(find);
         welcome_channel = client.channels.cache.get(welcome_channelId)
