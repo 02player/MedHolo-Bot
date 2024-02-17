@@ -22,12 +22,12 @@ module.exports = (client, logs_channel,Events) => {
             const startTime = Date.now();
             let channels = []
             const item = interaction.options.getString("fraza").toLowerCase();
-            for (const [_, channel] of interaction.guild.channels.cache) {
-                if (channel.type != ChannelType.GuildText) continue;
-                if ((channel.topic + "").includes(item) || channel.name.toLowerCase().includes(item)) {
-                    channels.push(channel);
+            interaction.guild.channels.cache.forEach(async channel => {
+                if (channel.type != ChannelType.GuildText) return;
+                if((channel.topic+"").includes(item) || channel.name.toLowerCase().includes(item)){
+                    channels.push(channel)
                 }
-            }
+            });
             if(channels.length==0) {await interaction.reply({content: `Wyszukiwanie na ${interaction.guild.name} dla: "${item}"\nNic nie zostało znalezione!`, ephemeral: true, components: [actionRow]});}
             else await interaction.reply({content: `Wyszukiwanie na ${interaction.guild.name} dla: "${item}"\nZnaleziono kanały:\n${channels.toString().split(',').join("\r\n")}`,components: [actionRow], ephemeral: true});
             await logs_channel.send(`${interaction.member.user} wyszukał **"${item}"** na serwerze MedHolo!\nCzas odpowiedzi: ${Date.now()-startTime}ms`);
