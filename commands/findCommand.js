@@ -1,8 +1,8 @@
 module.exports = (client, logs_channel,Events) => {
     const {ChannelType, ActionRowBuilder, ButtonBuilder, ButtonStyle, InteractionType} = require("discord.js");
-    const {firstGuildId, secondGuildId} = require("../config.json")
+    const {guilds} = require("../config.json")
     const actionRow = new ActionRowBuilder().addComponents(new ButtonBuilder().setLabel("Przeszukaj drugiego discorda.").setStyle(ButtonStyle.Danger).setEmoji("🔁").setCustomId("trysecond"))
-    const secondGuild = client.guilds.cache.get(secondGuildId)
+    const secondGuild = client.guilds.cache.get(guilds[1].guildId)
     client.on(Events.InteractionCreate, async interaction => {
         if(!interaction.isCommand() && !interaction.isButton()) return;
         if(interaction.customId === "trysecond"){
@@ -18,7 +18,7 @@ module.exports = (client, logs_channel,Events) => {
             else await interaction.reply({content: `Wyszukiwanie na ${secondGuild.name} dla: ${item}\nZnaleziono kanały:\n${secondChannels.toString().split(',').join("\r\n")}\n[Kliknij tutaj, aby dołączyć do drugiej części discorda MedHolo EMS!](https://discord.gg/3Pp5tqHpcK)`, ephemeral: true});
         }
         if(interaction.commandName == "find"){
-            if(interaction.guild.id != firstGuildId) {await interaction.reply({content: "Komendę można wykonać tylko na głównym discordzie MedHolo EMS.\n[Kliknij tutaj, aby dołączyć!](https://discord.gg/medholo-ems-986930829936717844)", ephemeral: true}); return; }
+            if(interaction.guild.id != guilds[0].guildId) {await interaction.reply({content: "Komendę można wykonać tylko na głównym discordzie MedHolo EMS.\n[Kliknij tutaj, aby dołączyć!](https://discord.gg/medholo-ems-986930829936717844)", ephemeral: true}); return; }
             const startTime = Date.now();
             let channels = []
             const item = interaction.options.getString("fraza").toLowerCase();
