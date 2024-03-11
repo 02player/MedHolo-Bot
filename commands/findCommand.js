@@ -17,7 +17,7 @@ module.exports = (client, logs_channel) => {
             });
             actionRow.components[0].setDisabled(true)
             await interaction.update({components: [actionRow]})
-            if(channels.length==0) {await interaction.reply({content: `Nic nie zostało znalezione!`, ephemeral: true}); return;}
+            if(channels.length==0) {await interaction.editReply({content: interaction.message.content+`\n\n\nNic nie zostało znalezione!`, ephemeral: true}); return;}
             else await interaction.editReply({content: interaction.message.content+`\n\n\nWyszukiwanie na ${secondGuild.name} dla: ${item}\nZnaleziono kanały:\n${channels.toString().split(',').join("\r\n")}\n[Kliknij tutaj, aby dołączyć do drugiej części discorda MedHolo EMS!](https://discord.gg/3Pp5tqHpcK)`, ephemeral: true});
             await logs_channel.send(`${interaction.member.user} wyszukał **"${item}"** na serwerze MedHolo EMS - 2!\nCzas odpowiedzi: ${Date.now()-startTime}ms`);
         }
@@ -26,7 +26,7 @@ module.exports = (client, logs_channel) => {
             const startTime = Date.now();
             let channels = []
             const item = interaction.options.getString("fraza").toLowerCase();
-            const regex = new RegExp(item, "i");
+            const regex = new RegExp(item.replace(" ","|"), "i");
             interaction.guild.channels.cache.forEach(async channel => {
                 if (channel.type != ChannelType.GuildText) return;
                 if (regex.test(channel.topic) || regex.test(channel.name)) {channels.push(channel);}
